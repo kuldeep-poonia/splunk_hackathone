@@ -113,6 +113,32 @@ simulation_telemetry.jsonl
     └── ...
 ```
 
+
+End-to-End Data Flow
+Chaos Simulation
+        │
+        ▼
+simulation_telemetry.jsonl
+        │
+        ▼
+Splunk Enterprise
+(Data Ingestion + Dashboards)
+        │
+        ▼
+Splunk REST API
+        │
+        ▼
+AI Incident Analyzer
+        │
+        ▼
+GitHub Models API
+(DeepSeek-V3-0324)
+        │
+        ▼
+Incident Summary
+
+
+
 ---
 
 ## Running The Project
@@ -166,3 +192,11 @@ There is still a lot that can be improved, and I plan to continue developing thi
 For now, this repository represents my best attempt at exploring how chaos engineering, observability, and AI can work together in a practical workflow.
 
 Thank you for taking the time to review it.
+
+
+
+Open Source License
+
+This project is released under the MIT License.
+
+The repository is intended for educational, research, and experimentation purposes.
