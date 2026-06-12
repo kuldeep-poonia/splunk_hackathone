@@ -45,6 +45,20 @@ graph TD
     end
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 📂 Project Structure
 Here is a breakdown of the code inside this repository:
 
@@ -68,6 +82,9 @@ Plaintext
     ├── policy_controller.go    # Enforces rules (like "Keep latency under 0.1s")
     ├── state_transition.go     # Mathematical formulas simulating the server
     └── ... (other utility files)
+
+
+    
 
 
 
