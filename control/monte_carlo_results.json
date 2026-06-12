@@ -1,7 +1,0 @@
-{
-  "total_runs": 5000,
-  "duration_seconds": 214.949,
-  "expected_cost_usd": 0.4858,
-  "value_at_risk_95_usd": 0.5015,
-  "tail_risk_cvar_95_usd": 0.5032
-}
