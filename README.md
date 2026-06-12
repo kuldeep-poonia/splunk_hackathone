@@ -1,84 +1,97 @@
-# Autonomous SRE: Smart Cloud Autopilot & AI Post-Mortem
+# Autonomous SRE: Chaos Simulation, Observability & AI Incident Analysis
 
-Welcome to the **Autonomous SRE** project! This is a smart control system designed to keep web applications and cloud infrastructure running smoothly during massive traffic spikes or unexpected server failures. It also automates the boring part of an engineer's job: figuring out what went wrong after a crash.
+## Overview
 
-Built for the **Splunk Hackathon**, this project combines Predictive Math, Splunk Enterprise, and Artificial Intelligence to create a self-healing and self-reporting system.
+Autonomous SRE is a personal project built for the Splunk Hackathon.
 
----
+The goal was simple: simulate real-world distributed system failures, visualize system behavior through Splunk dashboards, and explore whether AI can help engineers understand incidents faster.
 
-## 🛑 The Problem: Why did we build this?
+This project combines chaos engineering simulations, telemetry analysis, Splunk Enterprise dashboards, and AI-generated incident summaries into a single workflow.
 
-1. **The "Traffic Spike" Crash:** When a website gets a sudden surge of users (like during a flash sale), traditional auto-scalers just keep adding more servers. This often overwhelms the main database, causing a complete system blackout.
-2. **Broken Dashboards:** If the monitoring tools break and report fake data (like negative traffic), auto-scalers panic and make wrong decisions.
-3. **The Midnight Debugging:** When a system crashes, Site Reliability Engineers (SREs) have to manually dig through thousands of logs to find the root cause, which takes hours.
-
-## 💡 The Solution: How it works
-
-This project replaces reactive auto-scaling with a **Predictive Autopilot**. 
-
-* **Traffic Control (The Bouncer):** Instead of blindly adding servers, it calculates exactly how much traffic your backend can handle. If the database is struggling, it acts like a bouncer—temporarily holding requests in a queue (using Envoy Proxy) so the system doesn't crash. 
-* **Sensor Shield:** If monitoring tools send garbage data, the engine ignores it and safely "flies on instruments" using its own estimates until the sensors are fixed.
-* **Splunk + AI Post-Mortems:** The moment an incident is resolved, our tool automatically fetches the incident logs from **Splunk** and sends them to an AI model (**DeepSeek-V3**). The AI instantly writes a clear, human-readable report explaining what broke and how to prevent it next time.
+Rather than focusing on production deployment, the focus of this project is experimentation, learning, and demonstrating how observability and AI can work together during failure scenarios.
 
 ---
 
+## Why This Project?
 
-## 🏗 System Architecture
+Modern systems fail in unexpected ways.
+
+Traffic spikes, node failures, retry storms, network partitions, and cascading outages can quickly make debugging difficult.
+
+The idea behind this project was to answer three questions:
+
+* What happens when multiple failures occur at the same time?
+* Can telemetry be visualized clearly through Splunk?
+* Can AI help summarize incidents and provide recovery suggestions?
+
+---
+
+## What It Does
+
+### Chaos Simulation
+
+The simulation engine generates realistic failure scenarios such as:
+
+* Flash Crowd Events
+* Node Failures
+* Network Partitions
+* Retry Storms
+* Cascading Failures
+
+These simulations generate telemetry data that represents how a distributed system behaves under stress.
+
+### Splunk Observability
+
+Generated telemetry is ingested into Splunk Enterprise.
+
+Dashboards visualize:
+
+* Risk Score
+* Queue Depth
+* Latency
+* Scaling Behavior
+* Failure Events
+
+This provides a clear timeline of how incidents evolve.
+
+### AI Incident Analysis
+
+A lightweight analyzer fetches telemetry from Splunk using the REST API and forwards relevant incident information to an AI model through GitHub Models.
+
+The AI produces:
+
+* Severity Assessment
+* Root Cause Summary
+* Business Impact
+* Suggested Recovery Actions
+
+---
+
+## System Architecture
 
 ```text
-┌──────────────────────────────────────────────────────────────┐
-│                Autonomous SRE Control Engine                │
-│                 (Predictive Control Theory)                 │
-└───────────────────────┬──────────────────────────────────────┘
-                        │
-                        ▼
-┌──────────────────────────────────────────────────────────────┐
-│               Chaos Engineering Simulations                 │
-│                                                            │
-│  • Flash Crowd Events                                     │
-│  • Node Failures                                          │
-│  • Network Partitions                                     │
-│  • Cascading Failures                                     │
-│  • Retry Storms                                           │
-└───────────────────────┬──────────────────────────────────────┘
-                        │
-                        ▼
-┌──────────────────────────────────────────────────────────────┐
-│              simulation_telemetry.jsonl                    │
-│                                                            │
-│  Risk Scores • Queue Depth • Latency • Pods • Events      │
-└───────────────────────┬──────────────────────────────────────┘
-                        │
-                        ▼
-┌──────────────────────────────────────────────────────────────┐
-│                    Splunk Enterprise                       │
-│                                                            │
-│  • Telemetry Ingestion                                     │
-│  • Dashboard Analytics                                     │
-│  • Operational Monitoring                                  │
-│  • Incident Timeline                                       │
-└───────────────────────┬──────────────────────────────────────┘
-                        │ REST API
-                        ▼
-┌──────────────────────────────────────────────────────────────┐
-│                AI Incident Analyzer                        │
-│                                                            │
-│          Splunk Telemetry + GitHub Models                  │
-│                    DeepSeek-V3-0324                        │
-└───────────────────────┬──────────────────────────────────────┘
-                        │
-                        ▼
-┌──────────────────────────────────────────────────────────────┐
-│               Automated Post-Mortem Report                 │
-│                                                            │
-│  • Severity Assessment                                     │
-│  • Root Cause Analysis                                     │
-│  • Business Impact                                         │
-│  • Recovery Recommendations                                │
-└──────────────────────────────────────────────────────────────┘
+Chaos Simulation Engine
+          │
+          ▼
+simulation_telemetry.jsonl
+          │
+          ▼
+    Splunk Enterprise
+          │
+          ├── Dashboards
+          ├── Search
+          └── Analytics
+          │
+          ▼
+   AI Incident Analyzer
+          │
+          ▼
+ Incident Summary Report
 ```
 
-## 📂 Project Structure
+---
+
+## Project Structure
 
 ```text
 .
@@ -87,13 +100,11 @@ This project replaces reactive auto-scaling with a **Predictive Autopilot**.
 ├── simulation_telemetry.jsonl
 ├── monte_carlo_results.json
 ├── README.md
-├── .env
 │
 └── control/
     ├── chaos_simulation_test.go
     ├── adversarial_physics_test.go
     ├── ekf_robustness_test.go
-    ├── incident_analyzer.go
     ├── policy_controller.go
     ├── coordinated_optimizer.go
     ├── kalman.go
@@ -102,58 +113,56 @@ This project replaces reactive auto-scaling with a **Predictive Autopilot**.
     └── ...
 ```
 
-## 🔄 Data Flow
+---
 
-1. Chaos simulations generate realistic failure scenarios.
-2. Telemetry is exported into JSONL format.
-3. Splunk Enterprise ingests and visualizes operational metrics.
-4. AI Analyzer queries Splunk through the REST API.
-5. GitHub Models processes telemetry and generates RCA reports.
-6. Engineers receive automated incident analysis and recovery guidance.
+## Running The Project
 
+### Generate Telemetry
+
+```bash
+go test -v -run TestChaos_CascadingDeathSpiral ./control
 ```
 
+### Visualize in Splunk
 
-🛠 Setup & Installation
-Prerequisites
-Go (Version 1.21 or higher)
+Configure Splunk to monitor:
 
-Splunk Enterprise (Running locally or in the cloud)
+```text
+simulation_telemetry.jsonl
+```
 
-GitHub Personal Access Token (To access the DeepSeek-V3 AI model)
+Create dashboards using the ingested telemetry.
 
-1. Clone the Code
-Bash
-git clone [https://github.com/kuldeep-poonia/splunk_hackathone.git](https://github.com/kuldeep-poonia/splunk_hackathone.git)
-cd splunk_hackathone
-2. Install Dependencies
-Bash
-go get [github.com/joho/godotenv](https://github.com/joho/godotenv)
-go mod tidy
-3. Setup Environment Variables
-Create a file named .env in the main folder and add your credentials:
+### Generate AI Incident Summary
 
-Code snippet
-# Your Splunk Login Details
-SPLUNK_URL=https://localhost:8089
-SPLUNK_USER=admin
-SPLUNK_PASSWORD=your_splunk_password
+```bash
+go run .
+```
 
-# GitHub Token for AI Access
-GITHUB_TOKEN=github_pat_your_token_here
-🏃‍♂️ How to Run
-Step 1: Run the Chaos Simulation (Create Data)
-To see the engine in action, we need to run a simulation where we hit the system with a massive traffic spike and a server failure. This will generate a log file (simulation_telemetry.json).
+---
 
-Bash
-go test -v -run TestChaos_CascadingDeathSpiral ./control/...
-Step 2: Upload to Splunk
-Make sure Splunk is monitoring the folder where simulation_telemetry.json is saved, so it ingests the logs.
+## Technology Stack
 
-Step 3: Run the AI Incident Analyzer
-Once Splunk has the logs, run this command. The script will securely log into Splunk, grab the latest crash data, send it to the AI, and print a human-readable root cause analysis.
+* Go
+* Splunk Enterprise
+* GitHub Models
+* DeepSeek-V3-0324
+* JSONL Telemetry
+* Chaos Engineering Concepts
+* Control Theory Concepts
 
-Bash
-go run main.go
-📄 License
-This project is licensed under the MIT License. Feel free to use, modify, and distribute it!
+
+
+
+
+## Personal Note
+
+This project was built independently with limited time and resources during the hackathon.
+
+I tried to implement as much functionality as possible within those system constraints and focused on building a complete end-to-end workflow rather than a perfect production system.
+
+There is still a lot that can be improved, and I plan to continue developing this project after the hackathon by improving simulations, telemetry pipelines, dashboards, and AI analysis capabilities.
+
+For now, this repository represents my best attempt at exploring how chaos engineering, observability, and AI can work together in a practical workflow.
+
+Thank you for taking the time to review it.
