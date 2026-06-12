@@ -10,21 +10,28 @@ It integrates natively with **Splunk Enterprise** for operational observability 
 ```mermaid
 graph TD
     subgraph "Core Control Loop (Go Engine)"
-        Plant[K8s/Envoy Simulator] -- "zTelemetry" --> EKF[Extended Kalman Filter]
-        EKF -- "Filtered State" --> MPC[Robust MPC Optimizer]
-        MPC -- "Control Vector (CQ, Pods)" --> Actuator[Actuator Dynamics]
+        Plant["K8s/Envoy Simulator"] -- "zTelemetry" --> EKF["Extended Kalman Filter"]
+        EKF -- "Filtered State" --> MPC["Robust MPC Optimizer"]
+        MPC -- "Control Vector (CQ, Pods)" --> Actuator["Actuator Dynamics"]
         Actuator --> Plant
-        Plant -- "Raw Telemetry" --> JSON[simulation_telemetry.jsonl]
+        Plant -- "Raw Telemetry" --> JSON["simulation_telemetry.jsonl"]
     end
 
     subgraph "Splunk & AI Observability Pipeline"
-        JSON -- "Ingest" --> Splunk[(Splunk Enterprise)]
-        Splunk -- "REST API (oneshot search)" --> Analyzer[splunk_ai_analyzer.go]
-        Analyzer -- "Telemetry + Prompt" --> GHModels[GitHub Models API]
+        JSON -- "Ingest" --> Splunk[("Splunk Enterprise")]
+        Splunk -- "REST API (oneshot search)" --> Analyzer["splunk_ai_analyzer.go"]
+        Analyzer -- "Telemetry + Prompt" --> GHModels["GitHub Models API"]
         GHModels -- "DeepSeek-V3 Output" --> Analyzer
-        Analyzer -- "SRE Post-Mortem" --> CLI[Terminal / Dashboard]
+        Analyzer -- "SRE Post-Mortem" --> CLI["Terminal / Dashboard"]
     end
+```
+
+
+
 🚀 Key Capabilities
+
+
+
 Zero-Allocation Hot Path: Evaluates 750M+ Stochastic Differential Equations (SDEs) across CPU cores without heap allocation.
 
 Universal Scalability Law (USL): Mathematically prevents infinite over-scaling during database lockups.
