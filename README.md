@@ -114,6 +114,8 @@ simulation_telemetry.jsonl
 ```
 
 
+```
+
 End-to-End Data Flow
 Chaos Simulation
         │
@@ -136,6 +138,9 @@ GitHub Models API
         │
         ▼
 Incident Summary
+
+
+```
 
 
 
