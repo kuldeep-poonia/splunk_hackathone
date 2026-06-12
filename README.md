@@ -43,7 +43,7 @@ graph TD
         GHModels -- "Generates RCA Report" --> Analyzer
         Analyzer -- "Prints Post-Mortem" --> CLI["SRE Dashboard / Terminal"]
     end
-
+```
 
 📂 Project Structure
 Here is a breakdown of the code inside this repository:
@@ -70,7 +70,7 @@ Plaintext
     └── ... (other utility files)
 
 
-    
+
 🛠 Setup & Installation
 Prerequisites
 Go (Version 1.21 or higher)
