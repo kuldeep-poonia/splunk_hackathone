@@ -248,12 +248,12 @@ if err := encoder.Encode(record); err != nil {
 
 }
 
-// ============================================================================
-// MONTE CARLO PROOF (WITH JSON EXPORT)
-// ============================================================================
+
+// monte carlo with json file output
+
 func TestChaos_MonteCarlo_10000_Scenarios(t *testing.T) {
 	fmt.Println("\n=========================================================================================================")
-	fmt.Println(" STATISTICAL PROOF: 10,000 MONTE CARLO CHAOS FUTURES (CVaR BOUNDING)")
+	fmt.Println(" statistical proof - 5k monte carlo chaos features (CVaR bounding)")
 	fmt.Println("=========================================================================================================")
 
 	totalRuns := 5000
