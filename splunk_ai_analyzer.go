@@ -75,7 +75,13 @@ func RunSplunkAIAnalyzer() error {
 	// 3. Execute Splunk Query (Oneshot mode for synchronous results)
 	fmt.Println("🔍 Fetching telemetry from Splunk Enterprise...")
 	
-	searchQuery := `search source="simulation_telemetry.jsonl" | sort - time_sec | head 10`
+	searchQuery := `
+search source="simulation_telemetry.jsonl"
+| search event!="-" 
+| table time_sec event risk_score physical_queue physical_latency retry_pool pods_ready pods_target
+| sort - risk_score
+| head 10
+`
 	data := url.Values{}
 	data.Set("search", searchQuery)
 	data.Set("exec_mode", "oneshot")
@@ -147,7 +153,7 @@ Keep response under 150 words.`, telemetryBuilder.String())
 	fmt.Println("🧠 Forwarding telemetry to DeepSeek-V3 for Root Cause Analysis...")
 	
 	chatReq := ChatRequest{
-		Model: "DeepSeek-V3", 
+		Model: "DeepSeek-V3-0324",
 		Messages: []ChatMessage{
 			{Role: "user", Content: prompt},
 		},
