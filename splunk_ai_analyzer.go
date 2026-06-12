@@ -15,16 +15,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// ============================================================================
+// 
 // SPLUNK API SCHEMAS
-// ============================================================================
+// 
 type SplunkSearchResponse struct {
 	Results []map[string]interface{} `json:"results"`
 }
 
-// ============================================================================
+// 
 // GITHUB MODELS API SCHEMAS
-// ============================================================================
+// 
 type ChatMessage struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
@@ -45,9 +45,9 @@ type ChatResponse struct {
 	} `json:"choices"`
 }
 
-// ============================================================================
+// 
 // CORE ANALYZER FUNCTION
-// ============================================================================
+// 
 func RunSplunkAIAnalyzer() error {
 	// 1. Load Environment Variables
 	if err := godotenv.Load(); err != nil {
