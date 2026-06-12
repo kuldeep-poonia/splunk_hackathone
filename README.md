@@ -1,4 +1,3 @@
-Markdown
 # Autonomous SRE: Smart Cloud Autopilot & AI Post-Mortem
 
 Welcome to the **Autonomous SRE** project! This is a smart control system designed to keep web applications and cloud infrastructure running smoothly during massive traffic spikes or unexpected server failures. It also automates the boring part of an engineer's job: figuring out what went wrong after a crash.
@@ -23,69 +22,96 @@ This project replaces reactive auto-scaling with a **Predictive Autopilot**.
 
 ---
 
-## 🏗 Architecture & Data Flow
 
-Here is how the data moves through the system, from the application to the AI report:
+## 🏗 System Architecture
 
-```mermaid
-graph TD
-    subgraph "1. The Control Engine (Go)"
-        App["App / Kubernetes Cluster"] -- "Live Traffic Metrics" --> Brain["Predictive Engine"]
-        Brain -- "Calculates Safe Limits" --> Brain
-        Brain -- "Adjusts Server Count & Queues" --> App
-        App -- "Saves Event Logs" --> JSON["simulation_telemetry.jsonl"]
-    end
-
-    subgraph "2. Splunk & AI Diagnostics"
-        JSON -- "Ingested by" --> Splunk[("Splunk Enterprise")]
-        Splunk -- "REST API fetches logs" --> Analyzer["splunk_ai_analyzer.go"]
-        Analyzer -- "Sends data to AI" --> GHModels["GitHub Models API (DeepSeek-V3)"]
-        GHModels -- "Generates RCA Report" --> Analyzer
-        Analyzer -- "Prints Post-Mortem" --> CLI["SRE Dashboard / Terminal"]
-    end
+```text
+┌──────────────────────────────────────────────────────────────┐
+│                Autonomous SRE Control Engine                │
+│                 (Predictive Control Theory)                 │
+└───────────────────────┬──────────────────────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────────────────────┐
+│               Chaos Engineering Simulations                 │
+│                                                            │
+│  • Flash Crowd Events                                     │
+│  • Node Failures                                          │
+│  • Network Partitions                                     │
+│  • Cascading Failures                                     │
+│  • Retry Storms                                           │
+└───────────────────────┬──────────────────────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────────────────────┐
+│              simulation_telemetry.jsonl                    │
+│                                                            │
+│  Risk Scores • Queue Depth • Latency • Pods • Events      │
+└───────────────────────┬──────────────────────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    Splunk Enterprise                       │
+│                                                            │
+│  • Telemetry Ingestion                                     │
+│  • Dashboard Analytics                                     │
+│  • Operational Monitoring                                  │
+│  • Incident Timeline                                       │
+└───────────────────────┬──────────────────────────────────────┘
+                        │ REST API
+                        ▼
+┌──────────────────────────────────────────────────────────────┐
+│                AI Incident Analyzer                        │
+│                                                            │
+│          Splunk Telemetry + GitHub Models                  │
+│                    DeepSeek-V3-0324                        │
+└───────────────────────┬──────────────────────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────────────────────┐
+│               Automated Post-Mortem Report                 │
+│                                                            │
+│  • Severity Assessment                                     │
+│  • Root Cause Analysis                                     │
+│  • Business Impact                                         │
+│  • Recovery Recommendations                                │
+└──────────────────────────────────────────────────────────────┘
 ```
 
+## 📂 Project Structure
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-📂 Project Structure
-Here is a breakdown of the code inside this repository:
-
-Plaintext
+```text
 .
-├── .env                        # API keys and Passwords (Ignored by Git)
-├── .gitignore                  
-├── go.mod / go.sum             # Go dependencies
-├── main.go                     # The main file to run the AI incident analyzer
-├── README.md                   # This file
-├── splunk_ai_analyzer.go       # Connects to Splunk, fetches logs, and talks to AI
-└── control/                    # The brain of the project (Physics & Math Engine)
-    ├── actuator_dynamics.go    # Simulates Kubernetes scaling and Envoy queues
-    ├── adversarial_physics_test.go # Tests to ensure the system survives bad data
-    ├── bundle_generator.go     # Generates possible solutions for the current problem
-    ├── chaos_simulation_test.go# Runs fake disasters to test the engine (Outputs JSON)
-    ├── coordinated_optimizer.go# Picks the best, cheapest solution to keep the app alive
-    ├── ekf_robustness_test.go  # Tests the "Sensor Shield" against fake data
-    ├── incident_analyzer.go    # Local version of the AI analyzer
-    ├── kalman.go               # The filter that smooths out messy traffic data
-    ├── policy_controller.go    # Enforces rules (like "Keep latency under 0.1s")
-    ├── state_transition.go     # Mathematical formulas simulating the server
-    └── ... (other utility files)
+├── main.go
+├── splunk_ai_analyzer.go
+├── simulation_telemetry.jsonl
+├── monte_carlo_results.json
+├── README.md
+├── .env
+│
+└── control/
+    ├── chaos_simulation_test.go
+    ├── adversarial_physics_test.go
+    ├── ekf_robustness_test.go
+    ├── incident_analyzer.go
+    ├── policy_controller.go
+    ├── coordinated_optimizer.go
+    ├── kalman.go
+    ├── actuator_dynamics.go
+    ├── state_transition.go
+    └── ...
+```
 
+## 🔄 Data Flow
 
-    
+1. Chaos simulations generate realistic failure scenarios.
+2. Telemetry is exported into JSONL format.
+3. Splunk Enterprise ingests and visualizes operational metrics.
+4. AI Analyzer queries Splunk through the REST API.
+5. GitHub Models processes telemetry and generates RCA reports.
+6. Engineers receive automated incident analysis and recovery guidance.
 
+```
 
 
 🛠 Setup & Installation
@@ -122,7 +148,7 @@ To see the engine in action, we need to run a simulation where we hit the system
 Bash
 go test -v -run TestChaos_CascadingDeathSpiral ./control/...
 Step 2: Upload to Splunk
-Make sure Splunk is monitoring the folder where simulation_telemetry.jsonl is saved, so it ingests the logs.
+Make sure Splunk is monitoring the folder where simulation_telemetry.json is saved, so it ingests the logs.
 
 Step 3: Run the AI Incident Analyzer
 Once Splunk has the logs, run this command. The script will securely log into Splunk, grab the latest crash data, send it to the AI, and print a human-readable root cause analysis.
